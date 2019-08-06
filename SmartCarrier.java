@@ -1,3 +1,4 @@
+import java.util.List;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -117,7 +118,7 @@ public class SmartCarrier {
                     listAllAccounts();
                     break;
                 case 2:
-                    //
+                    eraseFirstMediaMessage();
                     break;
                 case 3:
                     //
@@ -153,6 +154,26 @@ public class SmartCarrier {
             System.out.printf("Total charge %.2f\n", charge);
             System.out.println("------------------------------------");
             charge = 0.0;
+        }
+    }
+
+    public void eraseFirstMediaMessage() {
+        Set<Entry<String, ArrayList<Item>>> entries = map.entrySet();
+
+        for (Entry<String, ArrayList<Item>> ent : entries) {
+            eraseHelper(ent.getValue());
+        }
+    }
+
+    private void eraseHelper(List<? extends Item> messages) {
+        for (Item item : messages) {
+            if (item instanceof Message<?>) {
+                Message<?> msg = (Message<?>)item;
+                if (msg.getMessage() instanceof Media) {
+                    messages.remove(msg);
+                    break;
+                }
+            }
         }
     }
 

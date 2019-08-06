@@ -12,6 +12,7 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.Map.Entry;
 import java.util.ListIterator;
+import java.util.NoSuchElementException;
 
 public class SmartCarrier {
     private TreeMap<String, ArrayList<Item>> map;
@@ -121,7 +122,7 @@ public class SmartCarrier {
                     eraseFirstMediaMessage();
                     break;
                 case 3:
-                    //
+                    disconnectAccount();
                     break;
                 case 4:
                     //
@@ -174,6 +175,31 @@ public class SmartCarrier {
                     break;
                 }
             }
+        }
+    }
+
+    public void disconnectAccount() {
+        Scanner userInput = new Scanner(System.in);
+        String phoneNumber;
+
+        System.out.print("Enter an account phone number: ");
+        phoneNumber = userInput.nextLine().trim();
+
+        try {
+            if (map.get(phoneNumber) == null) {
+                System.out.println("Account " + phoneNumber
+                    + " does not exist!");
+            } else {
+                List<Item> messages = map.remove(phoneNumber);
+                double totalCharge = 0.0;
+                for (Item item : messages) {
+                    totalCharge += item.getCharge();
+                }
+
+                System.out.println("Total charge is: " + totalCharge);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
         }
     }
 
